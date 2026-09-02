@@ -145,9 +145,13 @@ function getGlyphPrefixFromFileName(fileName) {
 		.normalize('NFKC')
 		.replace(/\p{Cf}|\p{Variation_Selector}/gu, '')
 		.trim();
-	const match = normalizedName.match(/^glyph\s*_\s*([0-9A-F]{1,4})\s*\.png$/i);
+	const match = normalizedName.match(/^glyph\s*_\s*([0-9A-F]{1,4})(?:\s*\(\d+\)|\s*[-_]\s*copy)?\s*\.png$/i);
 
 	return match ? getGlyphPrefix(match[1], null) : null;
+}
+
+function getGlyphPrefixForImport(fileName, selectedPrefix = 'E0') {
+	return getGlyphPrefixFromFileName(fileName) || getGlyphPrefix(selectedPrefix, null);
 }
 
 async function loadPngFile(file, options = {}) {
